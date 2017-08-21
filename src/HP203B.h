@@ -17,14 +17,17 @@
 
 #include <Wire.h>
 
-#define Addr 0x76  //Unshifted 7-bit I2C address for the sensor
+#define HP203_DEFAULT_ADDR 0x76  // Unshifted 7-bit I2C address for the sensor
+                        // 0x77 is an alternative, if CSB is LOW
 
 class HP203B {
 
 public:
   HP203B();
+  HP203B(int addr);
 
   //Public Functions
   void begin();
   int getAll(float* p_tempC, float* p_tempF, float* p_pressure);
+  int m_addr;
 };

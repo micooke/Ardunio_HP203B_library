@@ -11,7 +11,13 @@
 
 #include "HP203B.h"
 
-HP203B::HP203B() {}
+HP203B::HP203B() {
+  m_addr = HP203_DEFAULT_ADDR;
+}
+
+HP203B::HP203B(int addr) {
+  m_addr = addr;
+}
 
 void HP203B::begin(){
   Wire.begin();
@@ -26,7 +32,7 @@ int HP203B::getAll(float* p_tempC, float* p_tempF, float* p_pressure) {
   }
 
   // Start I2C transmission
-  Wire.beginTransmission(Addr);
+  Wire.beginTransmission(m_addr);
   // Send OSR and channel setting command
   Wire.write(0x40 |0x04 | 0x00);
   // Stop I2C transmission
@@ -34,14 +40,14 @@ int HP203B::getAll(float* p_tempC, float* p_tempF, float* p_pressure) {
   delay(500);
 
   // Start I2C transmission
-  Wire.beginTransmission(Addr);
+  Wire.beginTransmission(m_addr);
   // Select data register
   Wire.write(0x10);
   // Stop I2C transmission
   Wire.endTransmission();
 
   // Request 6 bytes of data
-  Wire.requestFrom(Addr, 6);
+  Wire.requestFrom(m_addr, 6);
 
   // Read 6 bytes of data
   // cTemp msb, cTemp csb, cTemp lsb, pressure msb, pressure csb, pressure lsb
